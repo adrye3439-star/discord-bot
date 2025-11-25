@@ -1,0 +1,33 @@
+const { Client, GatewayIntentBits } = require("discord.js");
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+
+client.on("ready", () => {
+  console.log(`Bot online como ${client.user.tag}`);
+});
+
+client.on("messageCreate", (msg) => {
+  if (msg.author.bot) return;
+
+  // comando: !pagar 250
+  if (msg.content.startsWith("!pagar")) {
+    let valor = parseFloat(msg.content.split(" ")[1]);
+
+    if (isNaN(valor)) {
+      msg.reply("Use assim: **!pagar 250**");
+      return;
+    }
+
+    // seus preços
+    let preco5 = (valor / 5).toFixed(2);
+    let preco8 = (valor / 8).toFixed(2);
+
+    msg.reply(
+      `💰 **Cálculo para ${valor} reais:**\n\n` +
+      `🔹 Com preço de 5 reais → **${preco5}**\n` +
+      `🔹 Com preço de 8 reais → **${preco8}**`
+    );
+  }
+});
+
+// coloque seu token aqui
+client.login(process.env.TOKEN);
